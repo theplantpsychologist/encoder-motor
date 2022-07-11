@@ -63,10 +63,9 @@ void loop() {
     B = abs(B-1); //flip from 0 to 1, or vise versa
   }
 
-
 //turn the motor
   potentiometer = analogRead(A5);
-  value = potentiometer/2 -256; //ranges from -256 to +256
+  value = potentiometer/2.1 -255; //ranges from -256 to +256
   if(value>0){
     analogWrite(11,value);
     analogWrite(10,0);
@@ -76,25 +75,27 @@ void loop() {
   }
   input_position = input_position + value *0.1;
 
-//see whether A or B signal changes first to determine direction of movement
-  if (_1A==_1B && _1B==B && _1A!=A){
-    angle = angle - 50;
-  }
-  if (_1A==_1B && _1B!=B && _1A==A){
-    angle = angle + 50;
+//detect rises/falls in the signals, and check which way the motor is turning
+  if(_1A!=A || _1B!=B){
+    if (value>0){
+      angle += 75;
+    }
+    if (value<0){
+      angle -= 75;
+    }
   }
 
 //display values
-  Serial.print("A:");
-  Serial.print(A);
-  Serial.print(",");
-  Serial.print("B:");
-  Serial.print(B); 
-  Serial.print(",");
-
-//  Serial.print("input_velocity:");
-//  Serial.print(value);
+//  Serial.print("A:");
+//  Serial.print(A);
 //  Serial.print(",");
+//  Serial.print("B:");
+//  Serial.print(B); 
+//  Serial.print(",");
+
+  Serial.print("input_velocity:");
+  Serial.print(value);
+  Serial.print(",");
   Serial.print("input_position:");
   Serial.print(input_position);
   Serial.print(",");
@@ -111,3 +112,12 @@ void loop() {
 // https://www.amazon.com/25GA370-Encoder-Metal-Gearmotor-150RPM/dp/B07GNFYGYQ
 // 408 pulses per rotation
 //https://en.wikipedia.org/wiki/Incremental_encoder#Position_reporting
+
+//see whether A or B signal changes first to determine direction of movement
+//  if (_1A==_1B && _1B==B && _1A!=A){
+//    angle = angle + 100;
+//  }
+//  if (_1A==_1B && _1B!=B && _1A==A){
+//    angle = angle - 100;
+//  }
+
