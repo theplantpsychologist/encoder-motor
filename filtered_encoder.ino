@@ -99,7 +99,7 @@ void loop() {
   Serial.print(input_position);
   Serial.print(",");
 
-  Serial.print("angle:");
+  Serial.print("detected_angle:");
   Serial.print(angle);
 
   Serial.println();
